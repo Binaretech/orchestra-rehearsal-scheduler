@@ -1,16 +1,42 @@
-# orchestra_rehearsal_scheduler
+# Project: Orchestra Concert/Rehearsal Scheduler
 
-A new Flutter project.
+This project is a Flutter application designed to help orchestras manage their concerts in a more organized way. The application allows users to create concerts, add repertoire, select musicians and sections, and organize the music stands for the invited musicians. The application is divided into different forms to facilitate the collection of relevant information.
 
-## Getting Started
+## Features
 
-This project is a starting point for a Flutter application.
+- **Concert Creation**: Users can create concerts and provide detailed information, such as the concert title, repertoire, invited sections, and the concert date.
+- **Repertoire**: Users can add pieces to the concert repertoire using a text input field, with a button to dynamically add pieces.
+- **Musician Management**: Users can select musicians for each section, managing music stands by instrument and allowing up to two musicians per stand.
+- **Multi-Step Form**: The concert creation process is divided into two forms to simplify data entry.
 
-A few resources to get you started if this is your first Flutter project:
+## Usage
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+### Prerequisites
+- Flutter SDK installed.
+- Code editor, such as VS Code or Android Studio.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Installation
+1. Clone the repository.
+   ```bash
+   git clone <repository-url>
+   ```
+2. Navigate to the project directory.
+   ```bash
+   cd project-name
+   ```
+3. Install the dependencies.
+   ```bash
+   flutter pub get
+   ```
+
+### Running the Application
+To run the application on an emulator or physical device, use the following command:
+```bash
+flutter run
+```
+
+## Contribution
+Contributions are welcome. If you would like to improve this project, open a `pull request` or create an `issue` to discuss proposed changes.
+
+## License
+This project is licensed under the MIT License. See the `LICENSE` file for more details.

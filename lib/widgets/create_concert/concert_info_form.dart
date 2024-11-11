@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:orchestra_rehearsal_scheduler/widgets/add_item_input.dart';
 
 class ConcertInfoForm extends StatefulWidget {
   final Function(
@@ -25,14 +26,14 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
 
   String title = '';
   List<String> repertoire = [];
-  String currentPiece = '';
   Set<String> sections = {};
 
   static const Map<String, Set<String>> instruments = {
     'Cuerdas': {'Violín 1', 'Violín 2', 'Viola', 'Cello', 'Contrabajo'},
     'Madera': {'Flauta', 'Oboe', 'Clarinete', 'Fagot'},
-    'Metales': {'Trompeta', 'Trombón', 'Tuba', 'Trompa'},
+    'Metales': {'Trompeta', 'Trombón', 'Tuba', 'Corno'},
   };
+
   Map<String, Set<String>> selectedInstruments = {
     'Cuerdas': {},
     'Madera': {},
@@ -81,40 +82,14 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
             'Repertorio',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          Row(
-            children: [
-              Expanded(
-                child: TextFormField(
-                  decoration: const InputDecoration(labelText: 'Agregar pieza'),
-                  onChanged: (value) {
-                    currentPiece = value;
-                  },
-                ),
-              ),
-              IconButton(
-                icon: const Icon(Icons.add),
-                onPressed: () {
-                  if (currentPiece.isNotEmpty) {
-                    setState(() {
-                      repertoire.add(currentPiece);
-                      currentPiece = '';
-                    });
-                  }
-                },
-              ),
-            ],
-          ),
-          Wrap(
-            children: repertoire
-                .map((piece) => Chip(
-                      label: Text(piece),
-                      onDeleted: () {
-                        setState(() {
-                          repertoire.remove(piece);
-                        });
-                      },
-                    ))
-                .toList(),
+          AddItemInput(
+            decoration: const InputDecoration(labelText: 'Agregar pieza'),
+            onAdd: (values) {
+              setState(() {
+                repertoire = values;
+              });
+            },
+            values: repertoire,
           ),
           const SizedBox(height: 16),
           const Text(
