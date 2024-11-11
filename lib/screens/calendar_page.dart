@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:orchestra_rehearsal_scheduler/screens/create_concert_page.dart';
 import 'package:orchestra_rehearsal_scheduler/widgets/calendar/calendar.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -39,7 +40,9 @@ class CalendarPageState extends State<CalendarPage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          // You can navigate to the page to add an event
+          Navigator.of(context).push(MaterialPageRoute(
+            builder: (context) => const CreateConcertPage(),
+          ));
         },
         child: const Icon(Icons.add),
       ),
