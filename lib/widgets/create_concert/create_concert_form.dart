@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:orchestra_rehearsal_scheduler/widgets/create_concert/concert_info_form.dart';
 import 'package:orchestra_rehearsal_scheduler/widgets/create_concert/musicians_form.dart';
+import 'package:orchestra_rehearsal_scheduler/widgets/create_concert/rehearshal_day_form.dart';
 
 class CreateConcertForm extends StatefulWidget {
   const CreateConcertForm({super.key});
@@ -13,6 +14,7 @@ class CreateConcertFormState extends State<CreateConcertForm> {
   final formKey = GlobalKey<FormState>();
   int currentStep = 0;
 
+  DateTime? performanceDate;
   Set<String> sections = {};
   Map<String, Set<String>> selectedInstruments = {};
 
@@ -20,18 +22,25 @@ class CreateConcertFormState extends State<CreateConcertForm> {
     return formKey.currentState?.validate() ?? false;
   }
 
-  void onSubmit(
-    Map<String, Map<String, List<List<String>>>> selectedMusicians,
-  ) {
+  void onNext() {
+    if (currentStep < 2) {
+      setState(() {
+        currentStep++;
+      });
+      return;
+    }
+
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(content: Text('Concierto creado con éxito')),
     );
   }
 
   void onBack() {
-    setState(() {
-      currentStep = 0;
-    });
+    if (currentStep > 0) {
+      setState(() {
+        currentStep--;
+      });
+    }
   }
 
   void onSubmitInfo(
@@ -44,7 +53,10 @@ class CreateConcertFormState extends State<CreateConcertForm> {
     setState(() {
       this.sections = sections;
       this.selectedInstruments = selectedInstruments;
-      currentStep = 1;
+
+      performanceDate = selectedDate;
+
+      onNext();
     });
   }
 
@@ -69,9 +81,20 @@ class CreateConcertFormState extends State<CreateConcertForm> {
             sections: sections,
             selectedInstruments: selectedInstruments,
             onBack: onBack,
-            onSubmit: onSubmit,
+            onSubmit: (a) {
+              onNext();
+            },
           ),
         ),
+        Step(
+          title: const Text('Días de Ensayo'),
+          isActive: currentStep >= 2,
+          content: RehearsalDaysForm(
+            performanceDate: performanceDate ?? DateTime.now(),
+            onBack: onBack,
+            onSubmit: (a) {},
+          ),
+        )
       ],
     );
   }
