@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:orchestra_rehearsal_scheduler/widgets/calendar/calendar_grid.dart';
-import 'package:orchestra_rehearsal_scheduler/widgets/calendar/calendar_header.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/calendar_grid.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/calendar_header.dart';
 
 const int pageSize = 10000;
 

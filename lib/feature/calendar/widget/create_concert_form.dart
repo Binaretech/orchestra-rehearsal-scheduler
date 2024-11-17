@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:orchestra_rehearsal_scheduler/widgets/create_concert/concert_info_form.dart';
-import 'package:orchestra_rehearsal_scheduler/widgets/create_concert/musicians_form.dart';
-import 'package:orchestra_rehearsal_scheduler/widgets/create_concert/rehearshal_day_form.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/concert_info_form.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/musicians_form.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/rehearshal_day_form.dart';
 
 class CreateConcertForm extends StatefulWidget {
   const CreateConcertForm({super.key});

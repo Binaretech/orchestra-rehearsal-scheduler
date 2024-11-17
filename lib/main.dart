@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:orchestra_rehearsal_scheduler/screens/calendar_page.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/auth/screen/login.dart';
 
 void main() {
-  runApp(const App());
+  runApp(
+    const ProviderScope(
+      child: App(),
+    ),
+  );
 }
 
 class App extends StatelessWidget {
@@ -11,12 +16,14 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Orchestra Rehearsal Scheduler',
       theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0D1627)),
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: const Color(0xFF0D1627),
+        ),
         useMaterial3: true,
       ),
-      home: const CalendarPage(),
+      home: const Login(),
     );
   }
 }

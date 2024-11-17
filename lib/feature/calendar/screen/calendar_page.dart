@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:orchestra_rehearsal_scheduler/screens/create_concert_page.dart';
-import 'package:orchestra_rehearsal_scheduler/widgets/calendar/calendar.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/screen/create_concert_page.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/calendar.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});

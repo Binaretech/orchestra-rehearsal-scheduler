@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:orchestra_rehearsal_scheduler/widgets/calendar/day.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/day.dart';
 
 class CalendarGrid extends StatelessWidget {
   final int month;
