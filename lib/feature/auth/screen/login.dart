@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/auth/providers.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/auth/widget/forgot_password_link.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/auth/widget/password_text_field.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/screen/calendar_page.dart';
 
 class Login extends ConsumerStatefulWidget {
   const Login({super.key});
@@ -14,6 +15,7 @@ class Login extends ConsumerStatefulWidget {
 class _LoginState extends ConsumerState<Login> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
+
   bool _isLoading = false;
 
   void _login() async {
@@ -23,7 +25,16 @@ class _LoginState extends ConsumerState<Login> {
 
     try {
       final provider = ref.read(authProvider.notifier);
-      await provider.login(_emailController.text, _passwordController.text);
+      final result =
+          await provider.login(_emailController.text, _passwordController.text);
+
+      if (result && mounted) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const CalendarPage(),
+          ),
+        );
+      }
     } finally {
       setState(() {
         _isLoading = false;

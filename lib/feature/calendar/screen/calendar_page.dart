@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/screen/create_concert_page.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/calendar.dart';
+import 'package:orchestra_rehearsal_scheduler/widgets/auth_guard.dart';
 
 class CalendarPage extends StatefulWidget {
   const CalendarPage({super.key});
@@ -23,28 +24,30 @@ class CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 40,
-        centerTitle: false,
-        title: Text(DateFormat.yMMMM().format(DateTime(year, month))),
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: Calendar(
-              onChange: _onChange,
-            ),
-          )
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(MaterialPageRoute(
-            builder: (context) => const CreateConcertPage(),
-          ));
-        },
-        child: const Icon(Icons.add),
+    return AuthGuard(
+      child: Scaffold(
+        appBar: AppBar(
+          toolbarHeight: 40,
+          centerTitle: false,
+          title: Text(DateFormat.yMMMM().format(DateTime(year, month))),
+        ),
+        body: Column(
+          children: [
+            Expanded(
+              child: Calendar(
+                onChange: _onChange,
+              ),
+            )
+          ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => const CreateConcertPage(),
+            ));
+          },
+          child: const Icon(Icons.add),
+        ),
       ),
     );
   }
