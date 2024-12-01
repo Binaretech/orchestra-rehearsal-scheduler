@@ -20,7 +20,6 @@ class CalendarGrid extends StatelessWidget {
 
     return LayoutBuilder(
       builder: (context, constraints) {
-        // Calculate the height for each cell by dividing the available height by the number of weeks
         final itemHeight = (constraints.maxHeight / ((totalItems / 7).ceil()));
         final itemWidth = constraints.maxWidth / 7;
 

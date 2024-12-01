@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/auth/provider/auth_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -32,7 +33,7 @@ Dio dio(Ref ref) {
     },
     onError: (DioException error, handler) {
       if (error.response?.statusCode == 401) {
-        // Handle unauthorized (e.g., refresh token or logout)
+        ref.read(authProvider.notifier).logout();
       }
       return handler.next(error);
     },

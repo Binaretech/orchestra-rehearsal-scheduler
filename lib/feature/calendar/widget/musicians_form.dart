@@ -1,15 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/data/model/section.dart';
 
 class MusiciansForm extends StatefulWidget {
-  final Set<String> sections;
-  final Map<String, Set<String>> selectedInstruments;
+  final Set<Section> sections;
   final Function onBack;
-  final Function(Map<String, Map<String, List<List<String>>>>) onSubmit;
+  final Function(Map<Section, List<List<String>>>) onSubmit;
 
   const MusiciansForm({
     super.key,
     required this.sections,
-    required this.selectedInstruments,
     required this.onBack,
     required this.onSubmit,
   });
@@ -19,52 +18,46 @@ class MusiciansForm extends StatefulWidget {
 }
 
 class MusiciansFormState extends State<MusiciansForm> {
-  Map<String, Map<String, List<List<String>>>> selectedMusicians = {
-    'Cuerdas': {},
-    'Madera': {},
-    'Metales': {},
-    'Percusión': {},
-  };
+  Map<Section, List<List<String>>> selectedMusicians = {};
 
-  void _addMusicStand(String section, String instrument) {
-    if (!selectedMusicians[section]!.containsKey(instrument)) {
+  void _addMusicStand(Section section) {
+    if (!selectedMusicians.containsKey(section)) {
       setState(() {
-        selectedMusicians[section]![instrument] = [];
+        selectedMusicians[section] = [];
       });
     }
     setState(() {
-      selectedMusicians[section]![instrument]!.add(['', '']);
+      selectedMusicians[section]!.add(['', '']);
     });
   }
 
-  void _removeMusicStand(String section, String instrument, int index) {
-    if (selectedMusicians[section]![instrument] != null &&
-        selectedMusicians[section]![instrument]!.length > index) {
+  void _removeMusicStand(Section section, int index) {
+    if (selectedMusicians[section] != null &&
+        selectedMusicians[section]!.length > index) {
       setState(() {
-        selectedMusicians[section]![instrument]!.removeAt(index);
+        selectedMusicians[section]!.removeAt(index);
       });
     }
   }
 
-  Widget _buildInstrumentMusicians(String section, String instrument) {
+  Widget _buildInstrumentMusicians(Section section) {
     List<Widget> musicStandWidgets = [];
     for (int index = 0;
-        index < (selectedMusicians[section]?[instrument]?.length ?? 0);
+        index < (selectedMusicians[section]?.length ?? 0);
         index++) {
       musicStandWidgets.add(
-        _buildMusicStandRow(section, instrument, index,
-            selectedMusicians[section]![instrument]![index]),
+        _buildMusicStandRow(section, index, selectedMusicians[section]![index]),
       );
     }
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(instrument,
+        Text(section.name,
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
         ...musicStandWidgets,
         const SizedBox(height: 16),
         ElevatedButton(
-          onPressed: () => _addMusicStand(section, instrument),
+          onPressed: () => _addMusicStand(section),
           child: const Text('Agregar Atril'),
         ),
       ],
@@ -72,7 +65,7 @@ class MusiciansFormState extends State<MusiciansForm> {
   }
 
   Widget _buildMusicStandRow(
-      String section, String instrument, int index, List<String> musicStand) {
+      Section section, int index, List<String> musicStand) {
     return Row(
       children: [
         Expanded(
@@ -82,10 +75,9 @@ class MusiciansFormState extends State<MusiciansForm> {
             initialValue: musicStand[0],
             onChanged: (value) {
               if (selectedMusicians[section] != null &&
-                  selectedMusicians[section]![instrument] != null &&
-                  selectedMusicians[section]![instrument]!.length > index) {
+                  selectedMusicians[section]!.length > index) {
                 setState(() {
-                  selectedMusicians[section]![instrument]![index][0] = value;
+                  selectedMusicians[section]![index][0] = value;
                 });
               }
             },
@@ -99,10 +91,9 @@ class MusiciansFormState extends State<MusiciansForm> {
             initialValue: musicStand[1],
             onChanged: (value) {
               if (selectedMusicians[section] != null &&
-                  selectedMusicians[section]![instrument] != null &&
-                  selectedMusicians[section]![instrument]!.length > index) {
+                  selectedMusicians[section]!.length > index) {
                 setState(() {
-                  selectedMusicians[section]![instrument]![index][1] = value;
+                  selectedMusicians[section]![index][1] = value;
                 });
               }
             },
@@ -110,7 +101,7 @@ class MusiciansFormState extends State<MusiciansForm> {
         ),
         IconButton(
           icon: const Icon(Icons.remove_circle),
-          onPressed: () => _removeMusicStand(section, instrument, index),
+          onPressed: () => _removeMusicStand(section, index),
         ),
       ],
     );
@@ -122,16 +113,7 @@ class MusiciansFormState extends State<MusiciansForm> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         ...widget.sections.map((section) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(section,
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
-              ...widget.selectedInstruments[section]!.map((instrument) =>
-                  _buildInstrumentMusicians(section, instrument)),
-            ],
-          );
+          return _buildInstrumentMusicians(section);
         }),
         const SizedBox(height: 16),
         Row(

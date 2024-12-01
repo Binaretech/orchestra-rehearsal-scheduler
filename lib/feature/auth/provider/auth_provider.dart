@@ -4,7 +4,7 @@ import 'package:orchestra_rehearsal_scheduler/providers/provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-part 'providers.g.dart';
+part 'auth_provider.g.dart';
 
 @riverpod
 AuthRepository authRepository(Ref ref) {

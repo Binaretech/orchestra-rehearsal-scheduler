@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/concert_info_form.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/musicians_form.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/rehearshal_day_form.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/data/model/section.dart';
 
 class CreateConcertForm extends StatefulWidget {
   const CreateConcertForm({super.key});
@@ -15,7 +16,7 @@ class CreateConcertFormState extends State<CreateConcertForm> {
   int currentStep = 0;
 
   DateTime? performanceDate;
-  Set<String> sections = {};
+  Set<Section> sections = {};
   Map<String, Set<String>> selectedInstruments = {};
 
   bool validateForm() {
@@ -43,19 +44,11 @@ class CreateConcertFormState extends State<CreateConcertForm> {
     }
   }
 
-  void onSubmitInfo(
-      String title,
-      List<String> repertoire,
-      Set<String> sections,
-      Map<String, Set<String>> selectedInstruments,
-      bool isDefinitive,
-      DateTime? selectedDate) {
+  void onSubmitInfo(String title, List<String> repertoire,
+      Set<Section> sections, bool isDefinitive, DateTime? selectedDate) {
     setState(() {
       this.sections = sections;
-      this.selectedInstruments = selectedInstruments;
-
       performanceDate = selectedDate;
-
       onNext();
     });
   }
@@ -79,7 +72,6 @@ class CreateConcertFormState extends State<CreateConcertForm> {
           isActive: currentStep >= 1,
           content: MusiciansForm(
             sections: sections,
-            selectedInstruments: selectedInstruments,
             onBack: onBack,
             onSubmit: (a) {
               onNext();

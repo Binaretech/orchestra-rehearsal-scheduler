@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:orchestra_rehearsal_scheduler/feature/auth/providers.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/auth/provider/auth_provider.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/auth/screen/login.dart';
 
 class AuthGuard extends ConsumerWidget {
@@ -11,8 +11,6 @@ class AuthGuard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final authState = ref.watch(authProvider);
-
-    print("auth ${authState}");
 
     if (!authState) {
       WidgetsBinding.instance.addPostFrameCallback((_) {

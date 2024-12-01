@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/data/model/section.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/sections_picker.dart';
 import 'package:orchestra_rehearsal_scheduler/widgets/add_item_input.dart';
 
 class ConcertInfoForm extends StatefulWidget {
-  final Function(
+  final void Function(
     String title,
     List<String> repertoire,
-    Set<String> sections,
-    Map<String, Set<String>> selectedInstruments,
+    Set<Section> selectedSections,
     bool isDefinitive,
     DateTime? selectedDate,
   ) onSubmit;
@@ -26,34 +27,25 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
 
   String title = '';
   List<String> repertoire = [];
-  Set<String> sections = {};
-
-  static const Map<String, Set<String>> instruments = {
-    'Cuerdas': {'Violín 1', 'Violín 2', 'Viola', 'Cello', 'Contrabajo'},
-    'Madera': {'Flauta', 'Oboe', 'Clarinete', 'Fagot'},
-    'Metales': {'Trompeta', 'Trombón', 'Tuba', 'Corno'},
-  };
-
-  Map<String, Set<String>> selectedInstruments = {
-    'Cuerdas': {},
-    'Madera': {},
-    'Metales': {},
-  };
-
+  Map<Section, bool> selectedSections = {};
   bool isDefinitive = false;
   DateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(2021),
-      lastDate: DateTime(2101),
-    );
-    if (picked != null && picked != selectedDate) {
-      setState(() {
-        selectedDate = picked;
-      });
+    try {
+      final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(2021),
+        lastDate: DateTime(2101),
+      );
+      if (picked != null && picked != selectedDate) {
+        setState(() {
+          selectedDate = picked;
+        });
+      }
+    } catch (e) {
+      // Handle error, e.g. show a dialog
     }
   }
 
@@ -96,71 +88,13 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
             'Secciones Convocadas',
             style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          ...instruments.keys.map((section) {
-            return ExpansionTile(
-              title: Row(
-                children: [
-                  Checkbox(
-                    value: sections.contains(section),
-                    onChanged: (bool? value) {
-                      setState(() {
-                        if (value == true) {
-                          sections.add(section);
-                          selectedInstruments[section] =
-                              Set.from(instruments[section]!);
-                        } else {
-                          sections.remove(section);
-                          selectedInstruments[section]?.clear();
-                        }
-                      });
-                    },
-                  ),
-                  const SizedBox(width: 8),
-                  Text(
-                    section,
-                    style: const TextStyle(fontSize: 16),
-                  ),
-                ],
-              ),
-              initiallyExpanded: sections.contains(section),
-              children: instruments[section]!
-                  .map((instrument) => CheckboxListTile(
-                        title: Text(instrument),
-                        value:
-                            selectedInstruments[section]!.contains(instrument),
-                        onChanged: (bool? value) {
-                          setState(() {
-                            if (value == true) {
-                              selectedInstruments[section]!.add(instrument);
-                            } else {
-                              selectedInstruments[section]!.remove(instrument);
-                            }
-                            if (selectedInstruments[section]!.length ==
-                                instruments[section]!.length) {
-                              sections.add(section);
-                            } else {
-                              sections.remove(section);
-                            }
-                          });
-                        },
-                      ))
-                  .toList(),
-            );
-          }),
-          CheckboxListTile(
-            title: const Text('Percusión'),
-            value: sections.contains('Percusión'),
-            contentPadding: const EdgeInsets.only(left: 21),
-            onChanged: (bool? value) {
+          SectionsPicker(
+            sectionValues: selectedSections,
+            onSectionChanged: (updatedValues) {
               setState(() {
-                if (value == true) {
-                  sections.add('Percusión');
-                } else {
-                  sections.remove('Percusión');
-                }
+                selectedSections = Map<Section, bool>.from(updatedValues);
               });
             },
-            controlAffinity: ListTileControlAffinity.leading,
           ),
           const SizedBox(height: 16),
           const Text(
@@ -192,19 +126,20 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
           ),
           const SizedBox(height: 16),
           FilledButton(
-            onPressed: () {
-              if (formKey.currentState!.validate()) {
-                formKey.currentState!.save();
-                widget.onSubmit(
-                  title,
-                  repertoire,
-                  sections,
-                  selectedInstruments,
-                  isDefinitive,
-                  selectedDate,
-                );
-              }
-            },
+            onPressed: formKey.currentState?.validate() == true
+                ? () {
+                    formKey.currentState!.save();
+                    widget.onSubmit(
+                      title,
+                      repertoire,
+                      selectedSections.keys
+                          .where((section) => selectedSections[section] == true)
+                          .toSet(),
+                      isDefinitive,
+                      selectedDate,
+                    );
+                  }
+                : null,
             child: const Text('Siguiente'),
           ),
         ],

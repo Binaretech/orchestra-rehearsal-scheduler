@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:orchestra_rehearsal_scheduler/feature/auth/providers.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/auth/provider/auth_provider.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/auth/screen/login.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/screen/calendar_page.dart';
 
