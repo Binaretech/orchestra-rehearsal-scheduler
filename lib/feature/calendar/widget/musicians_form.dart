@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:orchestra_rehearsal_scheduler/feature/calendar/data/model/section.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/sections/data/model/section.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/sections/widgets/section_musicians_picker.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/users/data/model/user.dart';
 
 class MusiciansForm extends StatefulWidget {
   final Set<Section> sections;
   final Function onBack;
-  final Function(Map<Section, List<List<String>>>) onSubmit;
+  final Function(Map<Section, List<List<User>>>) onSubmit;
 
   const MusiciansForm({
     super.key,
@@ -18,7 +20,7 @@ class MusiciansForm extends StatefulWidget {
 }
 
 class MusiciansFormState extends State<MusiciansForm> {
-  Map<Section, List<List<String>>> selectedMusicians = {};
+  Map<Section, List<List<User?>>> selectedMusicians = {};
 
   void _addMusicStand(Section section) {
     if (!selectedMusicians.containsKey(section)) {
@@ -27,7 +29,7 @@ class MusiciansFormState extends State<MusiciansForm> {
       });
     }
     setState(() {
-      selectedMusicians[section]!.add(['', '']);
+      selectedMusicians[section]!.add([null, null]);
     });
   }
 
@@ -56,7 +58,7 @@ class MusiciansFormState extends State<MusiciansForm> {
             style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold)),
         ...musicStandWidgets,
         const SizedBox(height: 16),
-        ElevatedButton(
+        FilledButton.tonal(
           onPressed: () => _addMusicStand(section),
           child: const Text('Agregar Atril'),
         ),
@@ -65,37 +67,33 @@ class MusiciansFormState extends State<MusiciansForm> {
   }
 
   Widget _buildMusicStandRow(
-      Section section, int index, List<String> musicStand) {
+      Section section, int index, List<User?> musicStand) {
     return Row(
       children: [
         Expanded(
-          child: TextFormField(
-            decoration:
-                InputDecoration(labelText: 'Músico Atril ${index + 1} - 1'),
-            initialValue: musicStand[0],
-            onChanged: (value) {
-              if (selectedMusicians[section] != null &&
-                  selectedMusicians[section]!.length > index) {
-                setState(() {
-                  selectedMusicians[section]![index][0] = value;
-                });
-              }
+          child: SectionMusicianPicker(
+            sectionId: section.id,
+            label: musicStand[0] == null
+                ? 'Seleccionar Músico 1'
+                : musicStand[0]!.fullname,
+            onSelect: (selectedMusician) {
+              setState(() {
+                selectedMusicians[section]![index][0] = selectedMusician;
+              });
             },
           ),
         ),
         const SizedBox(width: 16),
         Expanded(
-          child: TextFormField(
-            decoration:
-                InputDecoration(labelText: 'Músico Atril ${index + 1} - 2'),
-            initialValue: musicStand[1],
-            onChanged: (value) {
-              if (selectedMusicians[section] != null &&
-                  selectedMusicians[section]!.length > index) {
-                setState(() {
-                  selectedMusicians[section]![index][1] = value;
-                });
-              }
+          child: SectionMusicianPicker(
+            sectionId: section.id,
+            label: musicStand[1] == null
+                ? 'Seleccionar Músico 2'
+                : musicStand[1]!.fullname,
+            onSelect: (selectedMusician) {
+              setState(() {
+                selectedMusicians[section]![index][1] = selectedMusician;
+              });
             },
           ),
         ),
@@ -105,6 +103,21 @@ class MusiciansFormState extends State<MusiciansForm> {
         ),
       ],
     );
+  }
+
+  void _submitForm() {
+    Map<Section, List<List<User>>> filteredMusicians = {};
+
+    selectedMusicians.forEach((section, musicStands) {
+      filteredMusicians[section] = musicStands
+          .map((musicStand) => [
+                if (musicStand[0] != null) musicStand[0]!,
+                if (musicStand[1] != null) musicStand[1]!,
+              ])
+          .toList();
+    });
+
+    widget.onSubmit(filteredMusicians);
   }
 
   @override
@@ -125,11 +138,11 @@ class MusiciansFormState extends State<MusiciansForm> {
             ),
             const SizedBox(width: 16),
             FilledButton(
-              onPressed: () => widget.onSubmit(selectedMusicians),
+              onPressed: _submitForm,
               child: const Text('Siguiente'),
             ),
           ],
-        )
+        ),
       ],
     );
   }

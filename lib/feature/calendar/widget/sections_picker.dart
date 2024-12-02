@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/provider/calendar_provider.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/sections/data/model/section.dart';
 import 'package:orchestra_rehearsal_scheduler/widgets/list_checkbox.dart';
-import 'package:orchestra_rehearsal_scheduler/feature/calendar/data/model/section.dart';
 
 class SectionsPicker extends ConsumerWidget {
   final Map<Section, bool> sectionValues;

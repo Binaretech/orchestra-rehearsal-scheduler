@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:orchestra_rehearsal_scheduler/feature/calendar/data/model/section.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/sections_picker.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/sections/data/model/section.dart';
 import 'package:orchestra_rehearsal_scheduler/widgets/add_item_input.dart';
 
 class ConcertInfoForm extends StatefulWidget {
@@ -10,7 +10,7 @@ class ConcertInfoForm extends StatefulWidget {
     List<String> repertoire,
     Set<Section> selectedSections,
     bool isDefinitive,
-    DateTime? selectedDate,
+    DateTime selectedDate,
   ) onSubmit;
 
   const ConcertInfoForm({
@@ -32,20 +32,16 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
   DateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
-    try {
-      final DateTime? picked = await showDatePicker(
-        context: context,
-        initialDate: DateTime.now(),
-        firstDate: DateTime(2021),
-        lastDate: DateTime(2101),
-      );
-      if (picked != null && picked != selectedDate) {
-        setState(() {
-          selectedDate = picked;
-        });
-      }
-    } catch (e) {
-      // Handle error, e.g. show a dialog
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2101),
+    );
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
     }
   }
 
@@ -136,7 +132,7 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
                           .where((section) => selectedSections[section] == true)
                           .toSet(),
                       isDefinitive,
-                      selectedDate,
+                      selectedDate ?? DateTime.now(),
                     );
                   }
                 : null,

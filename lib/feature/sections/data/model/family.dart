@@ -1,4 +1,4 @@
-import 'package:orchestra_rehearsal_scheduler/feature/calendar/data/model/section.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/sections/data/model/section.dart';
 
 class Family {
   int id;

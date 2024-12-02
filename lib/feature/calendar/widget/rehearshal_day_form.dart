@@ -226,6 +226,12 @@ class RehearsalDaysFormState extends State<RehearsalDaysForm> {
       );
     } else {
       _generateRehearsalDays();
+
+      setState(() {
+        _startDate = null;
+        _rehearsalTime = null;
+        _selectedWeekdays.clear();
+      });
     }
   }
 
