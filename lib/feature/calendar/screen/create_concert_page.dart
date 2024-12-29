@@ -10,7 +10,11 @@ class CreateConcertPage extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Crear Concierto'),
       ),
-      body: const CreateConcertForm(),
+      body: CreateConcertForm(
+        onSuccess: () {
+          Navigator.of(context).pop();
+        },
+      ),
     );
   }
 }

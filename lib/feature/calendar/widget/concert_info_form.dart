@@ -8,6 +8,7 @@ class ConcertInfoForm extends StatefulWidget {
   final void Function(
     String title,
     List<String> repertoire,
+    String location,
     Set<Section> selectedSections,
     bool isDefinitive,
     DateTime selectedDate,
@@ -27,6 +28,7 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
 
   String title = '';
   List<String> repertoire = [];
+  String location = '';
   Map<Section, bool> selectedSections = {};
   bool isDefinitive = false;
   DateTime? selectedDate;
@@ -63,6 +65,19 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
             },
             onSaved: (value) {
               title = value ?? '';
+            },
+          ),
+          const SizedBox(height: 16),
+          TextFormField(
+            decoration: const InputDecoration(labelText: 'Ubicación'),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Por favor ingresa la ubicación del concierto';
+              }
+              return null;
+            },
+            onSaved: (value) {
+              location = value ?? '';
             },
           ),
           const SizedBox(height: 16),
@@ -128,6 +143,7 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
                     widget.onSubmit(
                       title,
                       repertoire,
+                      location,
                       selectedSections.keys
                           .where((section) => selectedSections[section] == true)
                           .toSet(),
