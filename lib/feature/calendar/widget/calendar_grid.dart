@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/domain/calendar_response.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/provider/calendar_provider.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/day.dart';
 
-class CalendarGrid extends StatelessWidget {
+class CalendarGrid extends ConsumerWidget {
   final int month;
   final int year;
 
   const CalendarGrid({super.key, required this.month, required this.year});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final entries =
+        ref.watch(getCalendarEntriesProvider(month: month, year: year));
+
     final startDate = DateTime(year, month, 1);
     final daysInMonth = DateTime(year, month + 1, 0).day;
     final firstDayOfWeek = startDate.weekday;
@@ -17,6 +23,12 @@ class CalendarGrid extends StatelessWidget {
     final prevMonthDays = firstDayOfWeek - 1;
     final nextMonthDays = 7 - lastDayOfWeek;
     final totalItems = prevMonthDays + daysInMonth + nextMonthDays;
+
+    final Map<String, List<Event>> data = entries.when(
+      data: (data) => data.data,
+      loading: () => {},
+      error: (error, stackTrace) => {},
+    );
 
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -32,7 +44,6 @@ class CalendarGrid extends StatelessWidget {
           itemCount: totalItems,
           itemBuilder: (context, index) {
             if (index < prevMonthDays) {
-              // Show previous month's days as padding
               final prevMonthDate = DateTime(year, month)
                   .subtract(Duration(days: prevMonthDays - index));
               return Day(
@@ -42,11 +53,12 @@ class CalendarGrid extends StatelessWidget {
                 isPadding: true,
               );
             } else if (index < prevMonthDays + daysInMonth) {
-              // Show current month's days
               final day = index - prevMonthDays + 1;
-              return Day(day: day, year: year, month: month);
+
+              final events = data['$year-$month-$day'] ?? [];
+
+              return Day(day: day, year: year, month: month, events: events);
             } else {
-              // Show next month's days as padding
               final nextMonthDate = DateTime(year, month + 1)
                   .add(Duration(days: index - prevMonthDays - daysInMonth));
               return Day(

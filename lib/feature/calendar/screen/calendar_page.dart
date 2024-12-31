@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:orchestra_rehearsal_scheduler/feature/calendar/provider/calendar_provider.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/screen/create_concert_page.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/calendar.dart';
 import 'package:orchestra_rehearsal_scheduler/widgets/auth_guard.dart';
 
-class CalendarPage extends StatefulWidget {
+class CalendarPage extends ConsumerStatefulWidget {
   const CalendarPage({super.key});
 
   @override
   CalendarPageState createState() => CalendarPageState();
 }
 
-class CalendarPageState extends State<CalendarPage> {
+class CalendarPageState extends ConsumerState<CalendarPage> {
   int month = DateTime.now().month;
   int year = DateTime.now().year;
 
@@ -24,12 +26,32 @@ class CalendarPageState extends State<CalendarPage> {
 
   @override
   Widget build(BuildContext context) {
+    final entries =
+        ref.watch(getCalendarEntriesProvider(month: month, year: year));
+
     return AuthGuard(
       child: Scaffold(
         appBar: AppBar(
           toolbarHeight: 40,
           centerTitle: false,
-          title: Text(DateFormat.yMMMM().format(DateTime(year, month))),
+          title: (Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                DateFormat.yMMMM().format(DateTime(year, month)),
+                style: const TextStyle(fontSize: 20),
+              ),
+              entries.isLoading
+                  ? const SizedBox(
+                      width: 20,
+                      height: 20,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                      ),
+                    )
+                  : Container()
+            ],
+          )),
         ),
         body: Column(
           children: [
