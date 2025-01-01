@@ -1,5 +1,21 @@
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/domain/contants.dart';
 
+class CalendarDateResponse {
+  final List<Event> data;
+
+  CalendarDateResponse({required this.data});
+
+  factory CalendarDateResponse.fromJson(Map<String, dynamic> json) {
+    List<Event> data =
+        List<Event>.from(json['data'].map((item) => Event.fromJson(item)));
+    return CalendarDateResponse(data: data);
+  }
+
+  Map<String, dynamic> toJson() {
+    return {'data': List<dynamic>.from(data.map((item) => item.toJson()))};
+  }
+}
+
 class CalendarResponse {
   final Map<String, List<Event>> data;
 
@@ -54,4 +70,6 @@ class Event {
       'title': title,
     };
   }
+
+  String get description => '${type.name}: $title';
 }

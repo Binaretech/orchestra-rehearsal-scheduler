@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/sections_picker.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/sections/data/model/section.dart';
 import 'package:orchestra_rehearsal_scheduler/widgets/add_item_input.dart';
+import 'package:orchestra_rehearsal_scheduler/widgets/date_time_picker.dart';
 
 class ConcertInfoForm extends StatefulWidget {
   final void Function(
@@ -26,6 +27,8 @@ class ConcertInfoForm extends StatefulWidget {
 class ConcertInfoFormState extends State<ConcertInfoForm> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  final DateFormat dateFormat = DateFormat('EEEE, d MMMM yyyy', 'es');
+
   String title = '';
   List<String> repertoire = [];
   String location = '';
@@ -34,7 +37,7 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
   DateTime? selectedDate;
 
   Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
+    final DateTime? picked = await showDateTimePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2021),
@@ -115,9 +118,11 @@ class ConcertInfoFormState extends State<ConcertInfoForm> {
           Row(
             children: [
               Expanded(
-                child: Text(selectedDate == null
-                    ? 'No se ha seleccionado ninguna fecha'
-                    : DateFormat('dd/MM/yyyy').format(selectedDate!)),
+                child: Text(
+                  selectedDate == null
+                      ? 'No se ha seleccionado ninguna fecha'
+                      : dateFormat.format(selectedDate!),
+                ),
               ),
               IconButton(
                 icon: const Icon(Icons.calendar_today),

@@ -194,7 +194,7 @@ class RehearsalDaysFormState extends State<RehearsalDaysForm> {
                 children: _rehearsalDays.map((date) {
                   return ListTile(
                     title: Text(
-                      DateFormat('EEEE, d MMMM yyyy').format(date),
+                      DateFormat('EEEE, d MMMM yyyy', 'es').format(date),
                     ),
                     subtitle: Text(
                       'Hora: ${DateFormat('hh:mm a').format(date)}',

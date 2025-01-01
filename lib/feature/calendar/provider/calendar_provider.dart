@@ -21,7 +21,14 @@ Future<FamiliesResponse> getFamilies(Ref ref) async {
 
 @riverpod
 Future<CalendarResponse> getCalendarEntries(Ref ref,
-    {int? month, int? year}) async {
+    {int? month, int? year, int? day}) async {
   final repository = ref.read(calendarRepositoryProvider);
   return repository.getEntries(month: month, year: year);
+}
+
+@riverpod
+Future<CalendarDateResponse> getCalendarDateEntries(Ref ref,
+    {int? day, int? month, int? year}) async {
+  final repository = ref.read(calendarRepositoryProvider);
+  return repository.getDateEntries(day: day, month: month, year: year);
 }

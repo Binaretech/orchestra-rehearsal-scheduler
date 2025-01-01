@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/provider/calendar_provider.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/screen/create_concert_page.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/calendar.dart';
+import 'package:orchestra_rehearsal_scheduler/utils/strings.dart';
 import 'package:orchestra_rehearsal_scheduler/widgets/auth_guard.dart';
 
 class CalendarPage extends ConsumerStatefulWidget {
@@ -38,7 +39,9 @@ class CalendarPageState extends ConsumerState<CalendarPage> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                DateFormat.yMMMM().format(DateTime(year, month)),
+                capitalize(
+                  DateFormat.yMMMM('es').format(DateTime(year, month)),
+                ),
                 style: const TextStyle(fontSize: 20),
               ),
               entries.isLoading

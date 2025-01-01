@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/sections/data/model/section.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/users/data/model/user.dart';
 
@@ -152,9 +153,7 @@ class ConcertReview extends StatelessWidget {
   }
 
   String _formatDate(DateTime date) {
-    return '${date.day.toString().padLeft(2, '0')}-'
-        '${date.month.toString().padLeft(2, '0')}-'
-        '${date.year}';
+    return DateFormat('EEEE, d MMMM yyyy hh:mm a', 'es').format(date);
   }
 
   Widget _buildMusiciansWithNumbering() {

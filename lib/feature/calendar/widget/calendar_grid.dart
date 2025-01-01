@@ -54,7 +54,6 @@ class CalendarGrid extends ConsumerWidget {
               );
             } else if (index < prevMonthDays + daysInMonth) {
               final day = index - prevMonthDays + 1;
-
               final events = data['$year-$month-$day'] ?? [];
 
               return Day(day: day, year: year, month: month, events: events);

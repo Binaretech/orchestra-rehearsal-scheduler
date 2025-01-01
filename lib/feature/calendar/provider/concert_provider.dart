@@ -7,7 +7,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'concert_provider.g.dart';
 
-@riverpod
+@Riverpod(keepAlive: false)
 ConcertRepository concertRepository(Ref ref) {
   final dio = ref.read(dioProvider);
   return ConcertRepository(dio);

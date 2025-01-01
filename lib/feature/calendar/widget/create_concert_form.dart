@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:intl/intl.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/domain/concert_request.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/provider/concert_provider.dart';
 import 'package:orchestra_rehearsal_scheduler/feature/calendar/widget/concert_info_form.dart';
@@ -100,9 +99,9 @@ class CreateConcertFormState extends ConsumerState<CreateConcertForm> {
       repertoire: repertoire,
       location: location,
       isDefinitive: isDefinitive,
-      date: DateFormat("yyyy-MM-dd").format(performanceDate),
+      date: performanceDate.toUtc().toIso8601String(),
       rehearsalDays:
-          rehearsalDays.map((date) => date.toIso8601String()).toList(),
+          rehearsalDays.map((date) => date.toUtc().toIso8601String()).toList(),
       distribution: selectedMusicians.entries.map((entry) {
         return Distribution(
           section: entry.key.id,
